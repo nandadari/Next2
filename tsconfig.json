@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "src/app/product/detail/[id]/page.tsx", "src/app/product/@modal/(.)detail/[id]/default.js"  ],
   "exclude": ["node_modules"]
 }
