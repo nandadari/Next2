@@ -1,21 +1,30 @@
 "use client"
+import { signIn } from "next-auth/react";
 import Link from "next/link";
+import {useSearchParams, useRouter } from "next/navigation";
 
 export default function LoginPage() {
-
-    const handleLogin = (e: any) =>{
+    const {push} = useRouter();
+    const searchParams = useSearchParams();
+    const callbackUrl = searchParams.get("callbackUrl") || "/";
+    const handleLogin = async (e: any) =>{
         e.preventDefault();
-        fetch('/api/auth/login', {
-            method: 'POST', 
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: e.currentTarget.email.value,
-                password: e.currentTarget.password.value
-            })
-        })
-    }
+        try {
+          const res = await signIn('credentials', {
+            redirect: false,
+            email: e.target.email.value,
+            password: e.target.password.value,
+            callbackUrl: callbackUrl,
+          });
+          if(!res?.error){
+            push(callbackUrl);
+          }else{
+            console.log(res.error);
+          }
+        }catch(err){
+          console.log(err);
+        }
+    };
 
     return(
 <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">

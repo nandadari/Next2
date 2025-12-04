@@ -17,17 +17,17 @@ export default async function ProductPage({ params }: ProductPageProps) {
       {products.data.length > 0 && 
       products.data.map((product:any) => (
         
-<Link href={`/product/detail/${product.id}`} key = {product.id} className="w-full max-w-sm bg-neutral-primary-soft p-6 border border-default rounded-base shadow-xs my-2">
+<Link href={`/product/detail/${product.id}`} key = {product.id} className="w-10/12 max-w-sm bg-neutral-primary-soft p-6 border border-default rounded-base shadow-xs my-2">
    
         <img className="rounded-base mb-6 object-cover h-96 w-f" 
         src={product.image} alt="product image" />
   
     <div>
         <div className="flex items-center space-x-3 mb-6">
-            <span className="bg-brand-softer border border-brand-subtle text-fg-brand-strong text-xs font-medium px-1.5 py-0.5 rounded-sm">4.8 out of 5</span>
+            <span className="bg-brand-softer border border-brand-subtle text-fg-brand-strong text-xs font-medium px-1.5 py-0.5 rounded-sm"></span>
         </div>
         
-            <h5 className="text-xl text-heading font-semibold tracking-tight truncate">{product.title}</h5>
+            <h5 className="text-xl text-heading font-semibold tracking-tight truncate">{product.name}</h5>
         
         <div className="flex items-center justify-between mt-6">
             <span className="text-3xl font-extrabold text-heading">$ {product.price}</span>

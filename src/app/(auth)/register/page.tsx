@@ -1,15 +1,47 @@
+'use client';
 import Link from "next/link";
-
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function RegisterPage() {
+  const {push} = useRouter();
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState('false');
+  const handleSubmit = async (e : any) => {
+    e.preventDefault();
+    setError('');
+    setIsLoading('true');
+   const res = await fetch('/api/auth/register', {
+      method: 'POST',
+      body: JSON.stringify({
+        fullname: e.target.fullname.value,
+        email: e.target.email.value,
+        password: e.target.password.value,
+      })
+    })
+    if (res.status === 200) {
+      e.target.reset();
+      setIsLoading(false);
+      push ('/login');
+    }else{
+      setError('Email Already Exist');
+      setIsLoading(false);
+      
+    }
+  };
+
+
  return(
 <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
   <div className="sm:mx-auto sm:w-full sm:max-w-sm">
     <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900 dark:text-white">Sin Up your account</h2>
   </div>
+  {error !== '' && (
+    <div className="text-red-600 font-bold  mt-5 mx-auto items-center">{error}</div>
+  )}
 
   <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-    <form action="#" method="POST" className="space-y-6">
+    <form  method="POST" className="space-y-6" onSubmit={(e) => handleSubmit(e)} >
       <div>
         <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900 dark:text-gray-100">Email address</label>
         <div className="mt-2">
