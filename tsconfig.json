@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-, "src/app/product/detail/[id]/page.tsx", "src/app/product/@modal/(.)detail/[id]/default.js"  ],
+, "src/app/product/detail/[id]/page.tsx", "src/app/product/@modal/(.)detail/[id]/default.js", "jest.config.ts"  ],
   "exclude": ["node_modules"]
 }

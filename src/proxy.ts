@@ -7,4 +7,4 @@ export function mainProxy(request: NextRequest){
     return res;
     }
 
-export default withAuth(mainProxy, ['/dashboard','/profile']);
+export default withAuth(mainProxy, ['/dashboard','/profile','/login','register']);

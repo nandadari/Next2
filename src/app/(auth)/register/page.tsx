@@ -6,11 +6,11 @@ import { useState } from "react";
 export default function RegisterPage() {
   const {push} = useRouter();
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState('false');
+  const [isLoading, setIsLoading] = useState(false);
   const handleSubmit = async (e : any) => {
     e.preventDefault();
     setError('');
-    setIsLoading('true');
+    setIsLoading(true);
    const res = await fetch('/api/auth/register', {
       method: 'POST',
       body: JSON.stringify({
@@ -65,7 +65,10 @@ export default function RegisterPage() {
       </div>
 
       <div>
-        <button type="submit" className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:shadow-none dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500">Sign Up</button>
+
+        <button type="submit" disabled={isLoading} className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:shadow-none dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500">
+        {isLoading ? 'Loading...' : 'Sign Up Account'}
+        </button>
       </div>
       <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
         Do You Have Acccount ? {" "} 

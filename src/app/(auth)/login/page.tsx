@@ -2,23 +2,31 @@
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import {useSearchParams, useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function LoginPage() {
     const {push} = useRouter();
+    const[error, setError] = useState('');
+    const[isLoading, setIsLoading] = useState(false);
     const searchParams = useSearchParams();
     const callbackUrl = searchParams.get("callbackUrl") || "/";
     const handleLogin = async (e: any) =>{
         e.preventDefault();
+        setError('');
+        setIsLoading(true);
         try {
           const res = await signIn('credentials', {
             redirect: false,
             email: e.target.email.value,
             password: e.target.password.value,
-            callbackUrl: callbackUrl,
+            callbackUrl: callbackUrl
           });
           if(!res?.error){
+            e.target.reset();
+            setIsLoading(false);
             push(callbackUrl);
           }else{
+            setIsLoading(false);
             console.log(res.error);
           }
         }catch(err){
@@ -54,8 +62,16 @@ export default function LoginPage() {
       </div>
 
       <div>
-        <button type="submit" className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:shadow-none dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500">Sign in</button>
+        <button 
+        disabled={isLoading}
+        type="submit" className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:shadow-none dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500">
+          {isLoading ? 'Loading...' : 'Sign in'}
+        </button>
       </div>
+      <hr />
+      <button type="button" 
+      onClick={() => signIn('google', {callbackUrl, redirect:false})} className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:shadow-none dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500">
+        Login With Google</button>
       <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
         Not Registered ?{" "} 
         <Link href="/register" className="text-blue-700 hover:underline dark:text-blue-300">Create Account</Link>

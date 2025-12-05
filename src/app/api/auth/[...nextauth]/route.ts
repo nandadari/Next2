@@ -1,6 +1,7 @@
+import { loginWithGoogle } from "@/lib/firebase/service";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-
+import GoogleProvider from "next-auth/providers/google"
 
 export const authOptions: NextAuthOptions = {
     session: {
@@ -22,26 +23,45 @@ export const authOptions: NextAuthOptions = {
 
                 const { email, password } = credentials;
 
-                if (email === "apr@gmail.com" && password === "12345") {
+                if (email === "ap@gmail.com" && password === "12345") {
                     return {
                         id: "1",
                         fullname: "Aprillia Wulan",
                         email: "apr@gmail.com",
-                        role: "admin",
+                        role: "member",
                     };
                 }
 
                 return null;
             },
         }),
+        GoogleProvider({
+            clientId: process.env.GOOGLE_OAUTH_CLIENT_ID || "",
+            clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET || "",
+        })
     ],
 
     callbacks: {
-        async jwt({ token, user }) {
+        async jwt({ token, user , account, profile} : any) {
             if (user) {
                 token.email = user.email;
                 token.fullname = user.fullname;
                 token.role = user.role;
+            }
+            if(account?.provider ==="google"){
+                const data = {
+                    fullname:user.name,
+                    email: user.email,
+                    type: 'google',
+                };
+             await loginWithGoogle(data, (result:{status: boolean, data: any}) => {
+                if (result.status){
+                token.email = result.data.email;
+                token.fullname = result.data.fullname;
+                token.role = result.data.role;
+             }
+             });
+             
             }
             return token;
         },
