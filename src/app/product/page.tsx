@@ -10,7 +10,7 @@ type ProductPageProps = {
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const slug = params.slug ?? []; // <-- default slug array
-  const products = await getData("http://localhost:3000/api/product");
+  const products = await getData(`${process.env.NEXT_PUBLIC_API_URL}/api/product`);
 //   console.log(products);
   return (
     <div className="grid grid-cols-4 mt-5 place-items-center">

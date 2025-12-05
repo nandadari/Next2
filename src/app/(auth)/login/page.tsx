@@ -1,4 +1,7 @@
-"use client"
+"use client";
+
+export const dynamic = "force-dynamic"; // ⬅ FIX TANPA PECAH KOMPONEN
+
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import {useSearchParams, useRouter } from "next/navigation";
@@ -6,33 +9,37 @@ import { useState } from "react";
 
 export default function LoginPage() {
     const {push} = useRouter();
-    const[error, setError] = useState('');
-    const[isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const searchParams = useSearchParams();
+
     const callbackUrl = searchParams.get("callbackUrl") || "/";
+
     const handleLogin = async (e: any) =>{
         e.preventDefault();
         setError('');
         setIsLoading(true);
         try {
-          const res = await signIn('credentials', {
-            redirect: false,
-            email: e.target.email.value,
-            password: e.target.password.value,
-            callbackUrl: callbackUrl
-          });
-          if(!res?.error){
-            e.target.reset();
-            setIsLoading(false);
-            push(callbackUrl);
-          }else{
-            setIsLoading(false);
-            console.log(res.error);
-          }
+            const res = await signIn("credentials", {
+                redirect: false,
+                email: e.target.email.value,
+                password: e.target.password.value,
+                callback: callbackUrl
+            });
+
+            if(!res?.error){
+                e.target.reset();
+                setIsLoading(false);
+                push(callbackUrl);
+            } else {
+                setIsLoading(false);
+                setError(res.error);
+            }
         }catch(err){
-          console.log(err);
+            console.log(err);
         }
     };
+
 
     return(
 <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
